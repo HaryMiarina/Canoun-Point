@@ -2,8 +2,8 @@ from datetime import datetime, timezone
 
 from pymongo import DESCENDING, MongoClient
 
-MONGO_URI = "mongodb://Voahary:maintik2.@localhost:27017/test_db"
-DATABASE_NAME = "test_db"
+MONGO_URI = "mongodb://user_db:password_user_db@localhost:27017/db_name"
+DATABASE_NAME = "db_name"
 SAVED_GAMES_COLLECTION = "saved_games"
 
 _client = MongoClient(MONGO_URI)

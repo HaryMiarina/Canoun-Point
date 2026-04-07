@@ -1,0 +1,98 @@
+Tutoriel simple MongoDB (admin -> utilisateur -> base)
+
+1) Se connecter en admin
+
+Dans le shell MongoDB:
+
+mongosh
+
+Puis:
+
+use admin
+
+2) Creer un utilisateur avec mot de passe et tous les droits
+
+Exemple utilisateur:
+- nom: user_db
+- mot de passe: password_user_db
+
+Commande:
+
+db.createUser({
+  user: "user_db",
+  pwd: "password_user_db",
+  roles: [
+    { role: "root", db: "admin" }
+  ]
+})
+
+3) Quitter puis se reconnecter avec cet utilisateur
+
+quit()
+
+mongosh "mongodb://user_db:password_user_db@localhost:27017/admin"
+
+4) Creer la base
+
+use db_name
+
+MongoDB cree la base quand on insere la premiere donnee:
+
+db.init.insertOne({ created_at: new Date(), ok: true })
+
+5) Lier explicitement la base a l utilisateur
+
+Depuis la connexion admin (ou utilisateur root), executer:
+
+use db_name
+db.grantRolesToUser("user_db", [
+  { role: "dbOwner", db: "db_name" }
+])
+
+Le role dbOwner donne tous les droits sur db_name.
+
+6) Tester la connexion sur la base cible
+
+mongosh "mongodb://user_db:password_user_db@localhost:27017/db_name"
+
+Puis tester:
+
+db.init.find()
+
+7) Tester la connexion a la base depuis l application Python
+
+Dans le dossier du projet, active ton environnement virtuel:
+
+source venv/bin/activate
+
+Installe PyMongo si besoin:
+
+pip install pymongo
+
+Cree un fichier de test, par exemple test_connexion_app.py, avec ce contenu:
+
+from pymongo import MongoClient
+
+MONGO_URI = "mongodb://user_db:password_user_db@localhost:27017/db_name"
+
+try:
+  client = MongoClient(MONGO_URI, serverSelectionTimeoutMS=3000)
+  client.admin.command("ping")
+  db = client["db_name"]
+  db.test_connexion.insert_one({"ok": True})
+  print("Connexion application -> MongoDB OK")
+except Exception as e:
+  print("Erreur de connexion:", e)
+
+Lance le test:
+
+python test_connexion_app.py
+
+Si tout est bon, tu verras:
+
+Connexion application -> MongoDB OK
+
+Option: verifier dans mongosh:
+
+mongosh "mongodb://user_db:password_user_db@localhost:27017/db_name"
+db.test_connexion.find()
