@@ -1,0 +1,45 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1280" height="720" viewBox="0 0 1280 720">
+  <defs>
+    <linearGradient id="sunset" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#ffdf9b"/>
+      <stop offset="45%" stop-color="#f7a86b"/>
+      <stop offset="100%" stop-color="#91543b"/>
+    </linearGradient>
+    <radialGradient id="sun" cx="0.72" cy="0.25" r="0.2">
+      <stop offset="0%" stop-color="#fff4be"/>
+      <stop offset="100%" stop-color="#fff4be" stop-opacity="0"/>
+    </radialGradient>
+  </defs>
+
+  <rect width="1280" height="720" fill="url(#sunset)"/>
+  <circle cx="930" cy="165" r="165" fill="url(#sun)"/>
+
+  <path d="M0 470 C160 450 290 520 420 500 C600 468 710 545 860 518 C980 496 1130 540 1280 522 L1280 720 L0 720 Z" fill="#b67c4d"/>
+  <path d="M0 548 C190 520 340 590 500 570 C680 550 840 615 990 594 C1120 575 1200 605 1280 596 L1280 720 L0 720 Z" fill="#8c5a3c"/>
+
+  <g fill="#3b251d" opacity="0.86">
+    <rect x="128" y="408" width="16" height="170" rx="8"/>
+    <ellipse cx="136" cy="392" rx="36" ry="20"/>
+    <ellipse cx="104" cy="420" rx="24" ry="16"/>
+    <ellipse cx="166" cy="427" rx="22" ry="14"/>
+
+    <rect x="1080" y="430" width="14" height="150" rx="7"/>
+    <ellipse cx="1087" cy="415" rx="32" ry="18"/>
+    <ellipse cx="1060" cy="438" rx="21" ry="14"/>
+    <ellipse cx="1111" cy="442" rx="19" ry="12"/>
+  </g>
+
+  <g fill="#2b1c16" opacity="0.95">
+    <rect x="560" y="460" width="170" height="90" rx="8"/>
+    <rect x="584" y="435" width="58" height="46" rx="5"/>
+    <rect x="656" y="435" width="58" height="46" rx="5"/>
+    <rect x="610" y="505" width="64" height="45" rx="5"/>
+    <rect x="548" y="550" width="194" height="12"/>
+  </g>
+
+  <g fill="#ffffff" opacity="0.22">
+    <ellipse cx="260" cy="160" rx="118" ry="34"/>
+    <ellipse cx="402" cy="188" rx="100" ry="30"/>
+    <ellipse cx="790" cy="125" rx="132" ry="38"/>
+  </g>
+</svg>

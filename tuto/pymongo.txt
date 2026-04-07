@@ -1,0 +1,1308 @@
+si je veux intaller un environnement de travail pour Python et MongoDB et que je suis sur Ubuntu que doit je faire. l affichage de mon projet sera en affichage par application comme swing en java mais en python et non un affichage web.
+
+Bonne idée 👍 tu veux donc un environnement complet Python + MongoDB + interface graphique (desktop) sur Ubuntu, sans passer par le web. Voilà comment faire proprement.
+🧱 1. Installer Python (si pas déjà ok)
+
+Ubuntu a déjà Python, mais vérifie :
+
+python3 --version
+
+Installe aussi pip et venv :
+
+sudo apt update
+sudo apt install python3-pip python3-venv -y
+
+📦 2. Créer un environnement de travail
+
+C’est très important pour éviter les conflits :
+
+mkdir mon_projet
+cd mon_projet
+python3 -m venv venv
+source venv/bin/activate
+
+🍃 3. Installer MongoDB
+Option simple (locale)
+
+sudo apt install mongodb -y
+
+Puis démarre :
+
+sudo systemctl start mongodb
+sudo systemctl enable mongodb
+
+Teste :
+
+mongo
+
+🔗 4. Connecter Python à MongoDB
+
+Installe le driver :
+
+pip install pymongo
+
+Exemple simple :
+
+from pymongo import MongoClient
+
+client = MongoClient("mongodb://localhost:27017/")
+db = client["test_db"]
+collection = db["users"]
+
+collection.insert_one({"nom": "Jean", "age": 25})
+
+for user in collection.find():
+    print(user)
+
+🖥️ 5. Interface graphique (équivalent Swing en Java)
+
+Tu as plusieurs choix en Python 👇
+🔹 Option 1 (facile) : Tkinter (déjà inclus)
+
+👉 Simple, léger, parfait pour commencer
+
+import tkinter as tk
+
+root = tk.Tk()
+root.title("Mon App")
+
+label = tk.Label(root, text="Hello MongoDB")
+label.pack()
+
+root.mainloop()
+
+🔹 Option 2 (recommandé) : PyQt ou PySide
+
+👉 Plus moderne, proche de Swing
+
+Installation :
+
+pip install PyQt5
+
+Exemple :
+
+from PyQt5.QtWidgets import QApplication, QLabel, QWidget
+
+app = QApplication([])
+
+window = QWidget()
+window.setWindowTitle("Mon App Python")
+
+label = QLabel("Hello MongoDB", parent=window)
+label.move(50, 50)
+
+window.resize(300, 200)
+window.show()
+
+app.exec_()
+
+🔹 Option 3 (pro) : Kivy
+
+👉 Pour apps modernes (style mobile/desktop)
+
+pip install kivy
+
+🧩 6. Structure recommandée du projet
+
+mon_projet/
+│
+├── venv/
+├── main.py
+├── db/
+│   └── mongo.py
+├── ui/
+│   └── app.py
+
+🔥 7. Exemple complet (GUI + MongoDB)
+
+import tkinter as tk
+from pymongo import MongoClient
+
+client = MongoClient("mongodb://localhost:27017/")
+db = client["test_db"]
+collection = db["users"]
+
+def ajouter():
+    nom = entry.get()
+    collection.insert_one({"nom": nom})
+    label.config(text="Ajouté !")
+
+root = tk.Tk()
+
+entry = tk.Entry(root)
+entry.pack()
+
+btn = tk.Button(root, text="Ajouter", command=ajouter)
+btn.pack()
+
+label = tk.Label(root, text="")
+label.pack()
+
+root.mainloop()
+
+⚡ Résumé rapide
+
+✔ Python + venv
+✔ MongoDB installé localement
+✔ pymongo pour connexion
+✔ Tkinter / PyQt pour interface
+💡 Conseils importants
+
+    Si ton PC est un peu lent → Tkinter
+
+    Si tu veux un rendu pro → PyQt
+
+    Pour gros projet → sépare UI / logique / base de données
+
+Si tu veux, je peux te faire :
+✅ un projet complet prêt à lancer
+✅ une app type (gestion utilisateurs, stock, etc.)
+✅ ou une interface style Swing mais en PyQt bien stylée
+
+Dis-moi 👍
+
+explique mkdir mon_projet
+cd mon_projet
+python3 -m venv venv
+source venv/bin/activate
+
+Parfait, je t’explique chaque ligne simplement et clairement 👇
+🧱 1. mkdir mon_projet
+
+👉 Créer un dossier
+
+    mkdir = make directory (créer un dossier)
+
+    mon_projet = nom du dossier
+
+📦 Résultat :
+➡️ Un nouveau dossier appelé mon_projet est créé
+📂 2. cd mon_projet
+
+👉 Entrer dans le dossier
+
+    cd = change directory
+
+    Tu te déplaces dans mon_projet
+
+📦 Résultat :
+➡️ Tu travailles maintenant à l’intérieur du projet
+🧪 3. python3 -m venv venv
+
+👉 Créer un environnement virtuel Python
+
+Décomposons :
+
+    python3 → lance Python
+
+    -m venv → utilise le module venv
+
+    venv → nom de l’environnement
+
+📦 Résultat :
+➡️ Un dossier venv/ est créé dans ton projet
+
+Ce dossier contient :
+
+    une version isolée de Python
+
+    pip
+
+    toutes tes futures librairies
+
+💡 Pourquoi ?
+➡️ Pour éviter que tes projets se mélangent (très important)
+⚡ 4. source venv/bin/activate
+
+👉 Activer l’environnement virtuel
+
+    source = exécuter un script
+
+    venv/bin/activate = script d’activation
+
+📦 Résultat :
+➡️ Ton terminal passe en mode environnement virtuel
+
+Tu verras un truc comme :
+
+(venv) user@pc:~/mon_projet$
+
+🧠 Résumé simple
+Commande	Rôle
+mkdir mon_projet	créer le projet
+cd mon_projet	entrer dedans
+python3 -m venv venv	créer un environnement isolé
+source venv/bin/activate	activer cet environnement
+🔥 Important à retenir
+
+✔ Tant que (venv) est affiché → tu es dans ton environnement
+✔ Tout ce que tu installes avec pip reste dans ce projet
+✔ Pour quitter :
+
+deactivate
+
+💡 Exemple concret
+
+Après activation :
+
+pip install pymongo
+
+➡️ pymongo sera installé uniquement dans ce projet, pas dans tout ton système
+
+Si tu veux, je peux aussi t’expliquer :
+
+    comment supprimer un venv proprement
+
+    comment gérer plusieurs projets
+
+    ou comment automatiser tout ça 👍
+
+
+voahary@voahary-GL552JX:~$ sudo apt install mongodb -y
+[sudo] password for voahary: 
+Reading package lists... Done
+Building dependency tree... Done
+Reading state information... Done
+Package mongodb is not available, but is referred to by another package.
+This may mean that the package is missing, has been obsoleted, or
+is only available from another source
+
+E: Package 'mongodb' has no installation candidate
+
+C’est normal 👍 — sur les versions récentes d’Ubuntu, le paquet mongodb n’existe plus dans les dépôts officiels. MongoDB doit être installé depuis son dépôt officiel.
+
+Je te montre la bonne méthode 👇
+🍃 ✅ Installer MongoDB sur Ubuntu (méthode officielle)
+1. Importer la clé GPG
+
+curl -fsSL https://pgp.mongodb.com/server-7.0.asc | \
+sudo gpg -o /usr/share/keyrings/mongodb-server-7.0.gpg --dearmor
+
+2. Ajouter le dépôt MongoDB
+
+echo "deb [ arch=amd64 signed-by=/usr/share/keyrings/mongodb-server-7.0.gpg ] https://repo.mongodb.org/apt/ubuntu jammy/mongodb-org/7.0 multiverse" | \
+sudo tee /etc/apt/sources.list.d/mongodb-org-7.0.list
+
+💡 jammy = Ubuntu 22.04 (même si tu es sur 20.04 ou 24.04, ça marche souvent)
+3. Mettre à jour
+
+sudo apt update
+
+4. Installer MongoDB
+
+sudo apt install mongodb-org -y
+
+5. Démarrer MongoDB
+
+sudo systemctl start mongod
+
+Activer au démarrage :
+
+sudo systemctl enable mongod
+
+6. Vérifier que ça marche
+
+sudo systemctl status mongod
+
+Tu dois voir :
+➡️ active (running)
+7. Tester MongoDB
+
+mongosh
+
+⚠️ Pourquoi ton erreur ?
+
+👉 Ubuntu a supprimé MongoDB pour des raisons de licence
+👉 Donc apt install mongodb ❌ ne marche plus
+🔥 Alternative (plus simple)
+
+Si tu veux éviter l’installation compliquée :
+
+👉 Utilise MongoDB en ligne :
+
+    MongoDB Atlas
+
+Avantages :
+✔ pas d’installation
+✔ accessible partout
+✔ gratuit (petit projet)
+💡 Mon conseil pour toi
+
+    Débutant → Atlas (rapide)
+
+    Projet sérieux/local → MongoDB local (ce qu’on vient de faire)
+
+Si tu veux, je peux t’aider à :
+✅ connecter ton app Python à MongoDB Atlas
+✅ créer une base + collection propre
+✅ ou corriger ton installation selon ta version Ubuntu
+
+Dis-moi 👍
+
+mongosh est elle similaire a mongo
+
+Oui 👍 mongosh est similaire à mongo, mais avec des différences importantes.
+⚖️ 🆚 mongo vs mongosh
+🔹 1. mongo (ancien)
+
+👉 C’était l’ancien shell MongoDB
+
+    Interface basique
+
+    Moins pratique
+
+    Abandonné progressivement
+
+📉 Aujourd’hui : déprécié (plus recommandé)
+🔹 2. mongosh (nouveau)
+
+👉 C’est le remplaçant officiel
+
+✔ Plus moderne
+✔ Basé sur JavaScript (Node.js)
+✔ Autocomplétion
+✔ Meilleur affichage
+✔ Messages d’erreur plus clairs
+
+📈 Aujourd’hui : standard utilisé
+🧠 Exemple (les deux font la même chose)
+
+Dans mongo ou mongosh :
+
+use test_db
+db.users.insertOne({nom: "Jean"})
+db.users.find()
+
+➡️ Résultat identique ✔
+🔥 Différences concrètes
+Fonction	mongo	mongosh
+Statut	❌ ancien	✅ actuel
+Interface	basique	moderne
+Autocomplétion	❌	✅
+Support futur	❌	✅
+💡 Conclusion
+
+👉 Oui, ils sont similaires dans l’usage
+👉 MAIS :
+
+✔ Utilise mongosh aujourd’hui
+❌ Évite mongo
+⚡ Astuce
+
+Si tu tapes :
+
+mongosh
+
+➡️ Tu es directement connecté à ta base locale
+
+Si tu veux, je peux te montrer :
+
+    comment créer une base propre
+
+    comment voir tes collections
+
+    ou comment relier mongosh avec ton app Python 👍
+
+
+comment cree une base et tester si mongo se connecte a python avec venv
+
+Parfait ! On va faire ça pas à pas, depuis ton environnement virtuel Python jusqu’à tester une base MongoDB locale. 🐍💾
+1️⃣ Activer ton environnement virtuel
+
+Dans ton dossier projet :
+
+cd mon_projet
+source venv/bin/activate
+
+Tu dois voir (venv) devant ton terminal :
+
+(venv) voahary@voahary-GL552JX:~/mon_projet$
+
+2️⃣ Installer le driver Python pour MongoDB
+
+pip install pymongo
+
+    pymongo = la librairie officielle pour connecter Python à MongoDB
+
+3️⃣ Créer une base et une collection dans mongosh (MongoDB shell)
+
+Lance le shell :
+
+mongosh
+
+Ensuite, crée une base et une collection :
+
+use test_db          // crée ou utilise la base test_db
+db.users.insertOne({nom: "Alice", age: 25})  // crée une collection "users" et ajoute un document
+db.users.find()      // vérifie le contenu
+
+💡 Explication :
+
+    use test_db → si la base n’existe pas, MongoDB la crée automatiquement à la première insertion
+
+    db.users → crée une collection users
+
+    insertOne → ajoute un document (équivalent d’une ligne en SQL)
+
+    find() → affiche tout le contenu de la collection
+
+4️⃣ Tester la connexion depuis Python
+
+Crée un fichier test_mongo.py :
+
+from pymongo import MongoClient
+
+# connexion à MongoDB local
+client = MongoClient("mongodb://localhost:27017/")
+
+# sélectionner la base et la collection
+db = client["test_db"]
+collection = db["users"]
+
+# insérer un document
+collection.insert_one({"nom": "Bob", "age": 30})
+
+# lire tous les documents
+for user in collection.find():
+    print(user)
+
+Exécute :
+
+python test_mongo.py
+
+✅ Tu devrais voir tous tes documents (Alice et Bob) s’afficher.
+5️⃣ Vérification rapide
+
+    Si tu vois des documents → Python se connecte bien à MongoDB
+
+    Si erreur Connection refused → MongoDB n’est pas démarré :
+
+sudo systemctl start mongod
+sudo systemctl status mongod
+
+💡 Résumé étape par étape
+
+    source venv/bin/activate → activer l’environnement Python
+
+    pip install pymongo → installer le driver
+
+    mongosh → créer la base et collection
+
+    python test_mongo.py → tester l’insertion et lecture
+
+Si tu veux, je peux te faire un petit squelette de projet Python + Tkinter + MongoDB prêt à lancer, avec interface graphique pour ajouter/voir des utilisateurs, exactement comme Swing en Java.
+
+Veux‑tu que je fasse ça ?
+
+donc une collection est automatiquement creer si elle n existe pas 
+
+Exactement ✅ !
+
+En MongoDB, une collection est créée automatiquement la première fois que tu y insères un document. Tu n’as pas besoin de la créer manuellement comme en SQL.
+Exemple concret
+
+Dans mongosh :
+
+use test_db       // sélectionne ou crée la base test_db
+db.users.insertOne({nom: "Alice"})  // "users" n’existait pas encore
+
+➡️ MongoDB va automatiquement :
+
+    Créer la base test_db si elle n’existe pas
+
+    Créer la collection users si elle n’existe pas
+
+    Insérer le document {nom: "Alice"}
+
+En Python avec pymongo
+
+Même principe :
+
+from pymongo import MongoClient
+
+client = MongoClient("mongodb://localhost:27017/")
+db = client["test_db"]       # base
+collection = db["users"]     # collection (créée si n’existe pas)
+
+collection.insert_one({"nom": "Bob"})  # insertion
+
+➡️ La collection users sera créée automatiquement si elle n’existait pas déjà.
+
+💡 Astuce : Une collection n’existe réellement qu’après l’insertion du premier document.
+Si tu fais juste db.users sans insérer, elle n’apparaîtra pas quand tu feras show collections.
+
+Si tu veux, je peux te montrer comment créer une interface Tkinter qui ajoute automatiquement des utilisateurs à une collection MongoDB, exactement comme une app Java Swing mais en Python.
+
+Veux‑tu que je fasse ça ?
+
+comment compiler et afficher ceci from pymongo import MongoClient
+
+client = MongoClient("mongodb://localhost:27017/")
+db = client["test_db"]
+collection = db["users"]
+
+collection.insert_one({"nom": "Jean", "age": 25})
+
+for user in collection.find():
+    print(user)
+
+Parfait ! En Python, il n’y a pas besoin de compiler comme en Java. Tu exécutes simplement le fichier Python dans ton environnement virtuel. Voici comment faire pas à pas :
+1️⃣ Crée un fichier Python
+
+Dans ton projet, crée un fichier, par exemple test_mongo.py :
+
+nano test_mongo.py
+
+Copie-colle ton code dedans :
+
+from pymongo import MongoClient
+
+client = MongoClient("mongodb://localhost:27017/")
+db = client["test_db"]
+collection = db["users"]
+
+collection.insert_one({"nom": "Jean", "age": 25})
+
+for user in collection.find():
+    print(user)
+
+Enregistre et quitte (Ctrl+O puis Ctrl+X dans nano).
+2️⃣ Active ton environnement virtuel
+
+cd mon_projet
+source venv/bin/activate
+
+Tu dois voir (venv) au début de la ligne de commande.
+3️⃣ Installe PyMongo si pas déjà fait
+
+pip install pymongo
+
+4️⃣ Exécute le script
+
+python test_mongo.py
+
+💡 Résultat attendu :
+
+{'_id': ObjectId('...'), 'nom': 'Jean', 'age': 25}
+
+    _id est automatiquement généré par MongoDB pour chaque document.
+
+    Chaque exécution ajoutera un nouveau document avec nom: Jean.
+
+5️⃣ Vérification avec mongosh (optionnel)
+
+mongosh
+use test_db
+db.users.find()
+
+Tu verras tous les documents que tu as insérés depuis Python.
+
+✅ Astuce : Si tu veux réinitialiser la collection pour tester plusieurs fois, dans mongosh :
+
+db.users.drop()   // supprime tous les documents de la collection
+
+Si tu veux, je peux te montrer comment transformer ce script en vraie application avec interface graphique pour ajouter et afficher les utilisateurs, comme Swing en Java mais en Python avec Tkinter ou PyQt.
+
+Veux‑tu que je fasse ça ?
+
+python db/mongo.py 
+Traceback (most recent call last):
+  File "/home/voahary/info/python/jeux_de_point/db/mongo.py", line 8, in <module>
+    collection.insert_one({"nom":"Jean", "age": 25})
+  File "/home/voahary/info/python/jeux_de_point/venv/lib/python3.12/site-packages/pymongo/synchronous/collection.py", line 891, in insert_one
+    self._insert_one(
+  File "/home/voahary/info/python/jeux_de_point/venv/lib/python3.12/site-packages/pymongo/synchronous/collection.py", line 831, in _insert_one
+    self._database.client._retryable_write(
+  File "/home/voahary/info/python/jeux_de_point/venv/lib/python3.12/site-packages/pymongo/synchronous/mongo_client.py", line 2083, in _retryable_write
+    return self._retry_with_session(retryable, func, s, bulk, operation, operation_id)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/voahary/info/python/jeux_de_point/venv/lib/python3.12/site-packages/pymongo/synchronous/mongo_client.py", line 1968, in _retry_with_session
+    return self._retry_internal(
+           ^^^^^^^^^^^^^^^^^^^^^
+  File "/home/voahary/info/python/jeux_de_point/venv/lib/python3.12/site-packages/pymongo/_csot.py", line 125, in csot_wrapper
+    return func(self, *args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/voahary/info/python/jeux_de_point/venv/lib/python3.12/site-packages/pymongo/synchronous/mongo_client.py", line 2014, in _retry_internal
+    ).run()
+      ^^^^^
+  File "/home/voahary/info/python/jeux_de_point/venv/lib/python3.12/site-packages/pymongo/synchronous/mongo_client.py", line 2763, in run
+    return self._read() if self._is_read else self._write()
+                                              ^^^^^^^^^^^^^
+  File "/home/voahary/info/python/jeux_de_point/venv/lib/python3.12/site-packages/pymongo/synchronous/mongo_client.py", line 2895, in _write
+    return self._func(self._session, conn, self._retryable)  # type: ignore
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/voahary/info/python/jeux_de_point/venv/lib/python3.12/site-packages/pymongo/synchronous/collection.py", line 819, in _insert_command
+    result = conn.command(
+             ^^^^^^^^^^^^^
+  File "/home/voahary/info/python/jeux_de_point/venv/lib/python3.12/site-packages/pymongo/synchronous/helpers.py", line 47, in inner
+    return func(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^
+  File "/home/voahary/info/python/jeux_de_point/venv/lib/python3.12/site-packages/pymongo/synchronous/pool.py", line 398, in command
+    return command(
+           ^^^^^^^^
+  File "/home/voahary/info/python/jeux_de_point/venv/lib/python3.12/site-packages/pymongo/synchronous/network.py", line 212, in command
+    helpers_shared._check_command_response(
+  File "/home/voahary/info/python/jeux_de_point/venv/lib/python3.12/site-packages/pymongo/helpers_shared.py", line 284, in _check_command_response
+    raise OperationFailure(errmsg, code, response, max_wire_version)
+pymongo.errors.OperationFailure: Command insert requires authentication, full error: {'ok': 0.0, 'errmsg': 'Command insert requires authentication', 'code': 13, 'codeName': 'Unauthorized'}
+(venv)
+
+Ah, parfait, le message d’erreur est clair :
+
+pymongo.errors.OperationFailure: Command insert requires authentication
+
+Cela signifie que MongoDB demande un compte/mot de passe, donc ton client Python n’a pas la permission d’écrire.
+C’est courant si :
+
+    Tu as installé MongoDB avec authentification activée (ce qui est la configuration par défaut dans certaines versions récentes)
+
+    Tu essayes de te connecter à la base sans utilisateur créé
+
+🔹 1️⃣ Vérifier si MongoDB demande un utilisateur
+
+Dans le terminal :
+
+mongosh
+
+Puis :
+
+use test_db
+db.getUsers()
+
+Si ça renvoie [] → il n’y a aucun utilisateur, donc par défaut MongoDB est en mode authentifié.
+🔹 2️⃣ Créer un utilisateur pour la base
+
+Dans mongosh :
+
+use admin
+db.createUser({
+  user: "monuser",
+  pwd: "monmotdepasse",
+  roles: [ { role: "readWrite", db: "test_db" } ]
+})
+
+    user = nom d’utilisateur
+
+    pwd = mot de passe
+
+    roles = permissions (ici lecture/écriture sur test_db)
+
+💡 Astuce : admin est la base recommandée pour créer les comptes.
+🔹 3️⃣ Connexion Python avec authentification
+
+Dans ton script Python, change la ligne de connexion :
+
+from pymongo import MongoClient
+
+client = MongoClient("mongodb://monuser:monmotdepasse@localhost:27017/test_db")
+db = client["test_db"]
+collection = db["users"]
+
+collection.insert_one({"nom": "Jean", "age": 25})
+
+for user in collection.find():
+    print(user)
+
+🔹 4️⃣ Vérification
+
+    Exécute ton script :
+
+python db/mongo.py
+
+    Tu devrais voir les documents s’afficher ✅
+
+🔹 5️⃣ Option rapide pour tests locaux
+
+Si tu ne veux pas créer d’utilisateur pour le moment :
+
+    Arrête MongoDB :
+
+sudo systemctl stop mongod
+
+    Redémarre MongoDB sans authentification :
+
+sudo mongod --dbpath /var/lib/mongodb --bind_ip 127.0.0.1 --port 27017 --noauth
+
+💡 Puis reconnecte Python normalement :
+
+client = MongoClient("mongodb://localhost:27017/")
+
+⚠️ Attention : c’est juste pour tester, pas pour un projet réel en production.
+
+Si tu veux, je peux te faire le script Python prêt à l’emploi pour MongoDB avec utilisateur, et expliquer comment gérer ça dans ton environnement virtuel.
+
+Veux‑tu que je fasse ça ?
+
+admin> db.createUser({
+...   user: "monuser",
+...   pwd: "monmotdepasse",
+...   roles: [ { role: "readWrite", db: "test_db" } ]
+... })
+MongoServerError[Unauthorized]: Command createUser requires authentication
+admin> 
+
+Ah, là le problème est clair ⚠️ : tu es dans MongoDB avec l’authentification activée, mais aucun utilisateur n’a encore été créé — du coup, tu n’as pas les droits pour créer un utilisateur. C’est un “cercle vicieux” classique.
+
+Sur les versions récentes de MongoDB, si l’authentification est activée dès l’installation, tu ne peux pas créer d’utilisateur tant que tu n’as pas démarré MongoDB en mode sans authentification pour le setup initial.
+🔹 Solution étape par étape (Ubuntu)
+1️⃣ Arrêter MongoDB
+
+sudo systemctl stop mongod
+
+2️⃣ Démarrer MongoDB sans authentification (mode de configuration initiale)
+
+sudo mongod --dbpath /var/lib/mongodb --bind_ip 127.0.0.1 --port 27017 --noauth
+
+💡 --noauth = MongoDB n’exige pas de mot de passe pour ce lancement
+3️⃣ Connecte-toi avec mongosh
+
+mongosh
+
+Puis crée ton utilisateur admin global :
+
+use admin
+db.createUser({
+  user: "admin",
+  pwd: "motdepasseAdmin123",
+  roles: [ { role: "userAdminAnyDatabase", db: "admin" } ]
+})
+
+✅ Cet utilisateur pourra créer d’autres utilisateurs et gérer la base.
+4️⃣ Arrêter MongoDB et activer l’authentification
+
+    Quitte mongosh : exit
+
+    Stop MongoDB si lancé en --noauth :
+
+sudo pkill mongod
+
+    Redémarre MongoDB normalement (auth activée) :
+
+sudo systemctl start mongod
+
+5️⃣ Se connecter avec l’utilisateur admin
+
+Dans mongosh :
+
+mongosh -u "admin" -p "admin" --authenticationDatabase "admin"
+
+    Maintenant tu peux créer d’autres utilisateurs avec permissions limitées sur test_db :
+
+use test_db
+db.createUser({
+  user: "monuser",
+  pwd: "monmotdepasse",
+  roles: [ { role: "readWrite", db: "test_db" } ]
+})
+
+6️⃣ Python : connexion avec cet utilisateur
+
+from pymongo import MongoClient
+
+client = MongoClient("mongodb://monuser:monmotdepasse@localhost:27017/test_db")
+db = client["test_db"]
+collection = db["users"]
+
+collection.insert_one({"nom": "Jean", "age": 25})
+
+for user in collection.find():
+    print(user)
+
+💡 Astuce : Pour les tests locaux rapides, tu peux aussi désactiver l’authentification complètement et utiliser MongoDB “open” temporairement.
+
+Si tu veux, je peux te faire un guide complet “setup MongoDB sur Ubuntu + Python + utilisateur” prêt à copier-coller, pour que tu puisses tester ton app Python tout de suite sans bloquer sur l’authentification.
+
+Veux‑tu que je fasse ça ?
+
+sudo systemctl start mongod
+(venv) voahary@voahary-GL552JX:~/info/python/jeux_de_point$ sudo systemctl status mongod
+× mongod.service - MongoDB Database Server
+     Loaded: loaded (/usr/lib/systemd/system/mongod.service; disabled; preset: >
+     Active: failed (Result: exit-code) since Thu 2026-03-19 21:19:15 GMT; 1s a>
+   Duration: 621ms
+       Docs: https://docs.mongodb.org/manual
+    Process: 7779 ExecStart=/usr/bin/mongod --config /etc/mongod.conf (code=exi>
+   Main PID: 7779 (code=exited, status=14)
+        CPU: 619ms
+
+Mar 19 21:19:15 voahary-GL552JX systemd[1]: Started mongod.service - MongoDB Da>
+Mar 19 21:19:15 voahary-GL552JX mongod[7779]: {"t":{"$date":"2026-03-19T21:19:1>
+Mar 19 21:19:15 voahary-GL552JX systemd[1]: mongod.service: Main process exited>
+Mar 19 21:19:15 voahary-GL552JX systemd[1]: mongod.service: Failed with result >
+lines 1-13/13 (END)
+
+Ah, merci pour le retour. 😅
+
+L’erreur mongod.service: Main process exited, status=14 signifie que MongoDB ne démarre pas. C’est souvent dû à problèmes de configuration ou de permissions du dossier de données (dbpath) sur Ubuntu.
+
+On va résoudre ça étape par étape.
+1️⃣ Vérifier le fichier de log
+
+MongoDB écrit ses erreurs dans le fichier de log (très utile pour comprendre) :
+
+cat /var/log/mongodb/mongod.log | tail -n 50
+
+💡 Cherche des messages comme permission denied ou data directory not found.
+2️⃣ Vérifier le dossier de données
+
+Par défaut, MongoDB utilise /var/lib/mongodb comme dbPath.
+
+Vérifie qu’il existe et que les permissions sont correctes :
+
+ls -ld /var/lib/mongodb
+
+Si tu vois que ce n’est pas accessible par mongodb, corrige :
+
+sudo chown -R mongodb:mongodb /var/lib/mongodb
+sudo chmod 700 /var/lib/mongodb
+
+3️⃣ Vérifier le fichier de configuration
+
+MongoDB lit /etc/mongod.conf
+
+Vérifie le chemin de dbPath :
+
+storage:
+  dbPath: /var/lib/mongodb
+
+Et les logs :
+
+systemLog:
+  destination: file
+  path: /var/log/mongodb/mongod.log
+  logAppend: true
+
+Si ces dossiers n’existent pas → crée-les avec les bonnes permissions :
+
+sudo mkdir -p /var/lib/mongodb
+sudo mkdir -p /var/log/mongodb
+sudo chown -R mongodb:mongodb /var/lib/mongodb /var/log/mongodb
+sudo chmod 700 /var/lib/mongodb /var/log/mongodb
+
+4️⃣ Tester MongoDB manuellement
+
+Pour voir si ça démarre correctement avant systemctl :
+
+sudo -u mongodb mongod --config /etc/mongod.conf
+
+    Si tu vois waiting for connections on port 27017 → c’est bon
+
+    Sinon, le log affichera exactement pourquoi ça échoue
+
+5️⃣ Redémarrer le service
+
+Si tout est ok :
+
+sudo systemctl daemon-reload
+sudo systemctl start mongod
+sudo systemctl status mongod
+
+6️⃣ Astuce pour tests locaux rapides
+
+Si tu veux juste tester Python et MongoDB sans te battre avec systemd et l’auth :
+
+sudo mongod --dbpath /var/lib/mongodb --bind_ip 127.0.0.1 --port 27017 --noauth
+
+    Ça démarre MongoDB directement dans le terminal
+
+    Tu peux tester ton script Python immédiatement
+
+    Pour stopper → Ctrl+C
+
+Si tu veux, je peux te préparer une séquence complète pour Ubuntu :
+
+✅ config dbPath et logs
+✅ permissions correctes
+✅ lancement MongoDB avec ou sans authentification
+✅ test Python pymongo
+
+Ça te permettra d’avoir MongoDB fonctionnel et Python prêt à écrire dans la base sans blocage.
+
+Veux‑tu que je fasse ça ?
+
+ voahary@voahary-GL552JX:~/info/python/jeux_de_point$ sudo systemctl reload mongod
+Failed to reload mongod.service: Job type reload is not applicable for unit mongod.service.
+
+Ah oui 😅, ce message est normal.
+
+La commande systemctl reload ne fonctionne pas pour MongoDB parce que le service ne supporte pas le “reload” de configuration à chaud. MongoDB doit être redémarré pour appliquer une modification.
+✅ Commandes correctes
+1️⃣ Redémarrer MongoDB
+
+sudo systemctl restart mongod
+
+    Redémarre complètement le service
+
+    Recharge la configuration de /etc/mongod.conf
+
+2️⃣ Vérifier le statut
+
+sudo systemctl status mongod
+
+    Tu devrais voir active (running)
+
+    Sinon, il y a toujours un problème de dbPath ou permissions
+
+🔹 Si ça ne démarre toujours pas
+
+    Vérifie le fichier log :
+
+cat /var/log/mongodb/mongod.log | tail -n 50
+
+    Vérifie que le dossier de données existe et appartient à l’utilisateur mongodb :
+
+sudo mkdir -p /var/lib/mongodb /var/log/mongodb
+sudo chown -R mongodb:mongodb /var/lib/mongodb /var/log/mongodb
+sudo chmod 700 /var/lib/mongodb /var/log/mongodb
+
+    Redémarre :
+
+sudo systemctl restart mongod
+
+💡 Astuce rapide pour tests Python locaux :
+
+Tu peux lancer MongoDB directement dans le terminal sans systemd et sans authentification :
+
+sudo mongod --dbpath /var/lib/mongodb --bind_ip 127.0.0.1 --port 27017 --noauth
+
+    Le service reste dans ton terminal
+
+    Pratique pour tester Python sans te battre avec les droits système
+
+    Arrêt → Ctrl+C
+
+Si tu veux, je peux te donner la procédure complète pour Ubuntu 22/24 pour :
+
+    MongoDB fonctionnel
+
+    Permissions correctes
+
+    Python avec pymongo qui peut écrire dans la base
+
+Ça te donnera un setup prêt à l’emploi.
+
+Veux‑tu que je fasse ça ?
+
+comment lister les databases , tables existantes dans mongodb
+
+Parfait ! 😎 En MongoDB, on ne parle pas de “tables”, mais de collections (équivalent des tables SQL). Voici comment lister les bases de données et les collections existantes.
+1️⃣ Lister les bases de données
+
+Dans le shell MongoDB (mongosh) :
+
+show dbs
+
+💡 Explication :
+
+    Affiche toutes les bases qui contiennent au moins un document
+
+    Si une base est vide → elle n’apparaît pas
+
+Exemple :
+
+admin     0.000GB
+local     0.000GB
+test_db   0.001GB
+
+2️⃣ Lister les collections d’une base
+
+    Sélectionne la base :
+
+use test_db
+
+    Liste les collections :
+
+show collections
+
+Exemple de résultat :
+
+users
+produits
+
+    Ici, users et produits sont des collections (tables en SQL)
+
+3️⃣ Avec Python (pymongo)
+
+from pymongo import MongoClient
+
+client = MongoClient("mongodb://localhost:27017/")
+# Lister toutes les bases
+print(client.list_database_names())
+
+# Sélectionner une base
+db = client["test_db"]
+
+# Lister les collections
+print(db.list_collection_names())
+
+Résultat typique :
+
+['admin', 'local', 'test_db']
+['users']
+
+💡 Notes importantes
+
+    Une base ou une collection n’existe réellement que si elle contient au moins un document
+
+    show dbs et list_database_names() n’affichent que celles qui ont des documents
+
+    Pour tester : ajoute un document si nécessaire
+
+Si tu veux, je peux te montrer un petit script Python qui liste automatiquement toutes les bases et leurs collections dans MongoDB, pratique pour ton projet.
+
+Veux‑tu que je fasse ça ?
+
+test_db> show collections
+MongoServerError[Unauthorized]: not authorized on test_db to execute command { listCollections: 1, filter: {}, cursor: {}, nameOnly: true, authorizedCollections: false, lsid: { id: UUID("8b7af728-ee22-41d3-9aa4-89afd73332c7") }, $db: "test_db" }
+
+Ah, parfait, ton message d’erreur est très clair :
+
+MongoServerError[Unauthorized]: not authorized on test_db to execute command ...
+
+Cela signifie que l’utilisateur avec lequel tu es connecté n’a pas les droits pour voir les collections dans test_db.
+
+En MongoDB, chaque opération est soumise à l’authentification et aux rôles.
+🔹 Pourquoi ça arrive
+
+    Tu es connecté avec un utilisateur qui n’a pas le rôle read ou readWrite sur test_db
+
+    Même si tu peux te connecter, certaines commandes comme show collections ou db.collection.find() sont refusées
+
+🔹 Solutions
+1️⃣ Connecte-toi avec un utilisateur qui a les droits
+
+Si tu as créé un utilisateur monuser avec readWrite sur test_db :
+
+mongosh -u "monuser" -p "monmotdepasse" --authenticationDatabase "test_db"
+
+    -u → utilisateur
+
+    -p → mot de passe
+
+    --authenticationDatabase → base où l’utilisateur a été créé
+
+Ensuite :
+
+use test_db
+show collections
+
+2️⃣ Créer un utilisateur avec les droits appropriés (si tu as accès admin)
+
+    Connecte-toi avec l’utilisateur admin (créé sur la base admin) :
+
+mongosh -u "admin" -p "motdepasseAdmin123" --authenticationDatabase "admin"
+
+    Crée un utilisateur pour test_db :
+
+use test_db
+db.createUser({
+  user: "monuser",
+  pwd: "monmotdepasse",
+  roles: [ { role: "readWrite", db: "test_db" } ]
+})
+
+    Maintenant, reconnecte-toi avec monuser pour voir les collections.
+
+3️⃣ Option pour tests locaux rapides (sans authentification)
+
+Si tu veux ignorer complètement l’auth pour tester Python :
+
+sudo mongod --dbpath /var/lib/mongodb --bind_ip 127.0.0.1 --port 27017 --noauth
+
+Puis connecte-toi avec mongosh :
+
+mongosh
+use test_db
+show collections
+
+    Toutes les commandes fonctionnent, pas de droits nécessaires
+
+    ✅ Pratique pour les tests locaux
+
+💡 Astuce pratique :
+
+Pour ton projet Python, si tu veux éviter tous les problèmes d’auth pour le moment, je te recommande de démarrer MongoDB en mode --noauth, faire tes tests et ton interface graphique, puis passer à l’auth une fois ton code stable.
+
+Si tu veux, je peux te préparer un guide complet prêt à copier-coller pour :
+
+    Démarrer MongoDB en mode test sans auth
+
+    Créer et lister des bases/collections
+
+    Connecter Python avec pymongo
+
+    Tester l’insertion et lecture de documents
+
+Veux‑tu que je fasse ça ?
+
+comment afficher les contenus des collections
+
+Parfait ! 😎 Pour afficher le contenu d’une collection MongoDB, tu peux le faire soit dans le shell MongoDB (mongosh), soit en Python avec pymongo. Voici comment.
+1️⃣ Avec le shell MongoDB (mongosh)
+
+    Connecte-toi à la base :
+
+mongosh -u "monuser" -p "monmotdepasse" --authenticationDatabase "test_db"
+
+    Sélectionne la base :
+
+use test_db
+
+    Affiche tous les documents d’une collection :
+
+db.users.find()
+
+    users = nom de la collection
+
+    Renvoie tous les documents sous forme JSON
+
+    Si tu veux un affichage “joli” :
+
+db.users.find().pretty()
+
+Exemple de sortie :
+
+{
+  "_id": ObjectId("651b6f8c1f3c4a9a12345678"),
+  "nom": "Jean",
+  "age": 25
+}
+
+2️⃣ Avec Python et pymongo
+
+from pymongo import MongoClient
+
+# Connexion à MongoDB (local, avec utilisateur)
+client = MongoClient("mongodb://monuser:monmotdepasse@localhost:27017/test_db")
+
+# Sélection de la base et de la collection
+db = client["test_db"]
+collection = db["users"]
+
+# Lire tous les documents
+for document in collection.find():
+    print(document)
+
+💡 Résultat typique :
+
+{'_id': ObjectId('651b6f8c1f3c4a9a12345678'), 'nom': 'Jean', 'age': 25}
+
+3️⃣ Filtrer des documents (optionnel)
+Shell MongoDB :
+
+db.users.find({age: 25})
+
+Python :
+
+for doc in collection.find({"age": 25}):
+    print(doc)
+
+4️⃣ Limiter le nombre de résultats
+Shell :
+
+db.users.find().limit(5)
+
+Python :
+
+for doc in collection.find().limit(5):
+    print(doc)
+
+💡 Astuce pratique :
+
+    Chaque document a un _id généré automatiquement
+
+    Tu peux trier, filtrer et projeter les champs que tu veux avec MongoDB, comme en SQL
+
+Si tu veux, je peux te faire un mini script Python + Tkinter qui :
+
+    Affiche toutes les collections
+
+    Affiche leurs contenus dans une interface graphique
+
+    Comme une mini application “Swing” mais en Python
+
+Veux‑tu que je fasse ça ?
+
+pour celui ci quand il est dans un fichier start.sh ca ne marche pas source ../venv/bin/activate
+
+Ah oui 😅, c’est un comportement normal sous Linux et Bash :
+
+Le problème vient de la manière dont source fonctionne dans un script.
+🔹 Explication
+
+    Quand tu fais source ../venv/bin/activate dans le terminal, ça active l’environnement pour ce terminal.
+
+    Quand tu mets la même commande dans un script start.sh et que tu l’exécutes avec :
+
+./start.sh
+
+ou
+
+sh start.sh
+
+➡️ ça ne modifie PAS ton shell courant.
+
+⚠️ Donc l’environnement virtuel n’est actif que dans le sous-processus qui exécute le script et disparaît dès que le script se termine.
+🔹 Solution 1 : sourcer le script
+
+Au lieu de lancer le script normalement, source-le dans ton terminal :
+
+source start.sh
+
+ou
+
+. start.sh
+
+    Le source fait que toutes les commandes du script s’exécutent dans ton shell courant, donc l’activation du venv reste effective après la fin du script.
+
+🔹 Solution 2 : activer le venv directement dans le script pour lancer Python
+
+Si ton objectif est de lancer ton script Python depuis le shell, tu peux le faire en une seule commande dans start.sh :
+
+#!/bin/bash
+
+# Activer le venv
+source ../venv/bin/activate
+
+# Lancer ton script Python
+python db/mongo.py
+
+Puis dans le terminal :
+
+source start.sh
+
+ou, si tu ne veux pas que le venv reste actif après :
+
+bash start.sh
+
+    Là, le venv est actif pendant l’exécution du script et Python utilisera les bonnes librairies.
+
+    Quand le script se termine, le terminal revient à ton shell normal.
+
+🔹 Solution 3 : utiliser le Python du venv directement
+
+Tu peux contourner complètement source :
+
+#!/bin/bash
+
+../venv/bin/python db/mongo.py
+
+    Là tu n’as pas besoin d’activer le venv
+
+    Python utilisera directement l’environnement virtuel
+
+    C’est plus simple pour les scripts automatisés
+
+💡 Astuce : Pour les scripts de lancement, solution 3 est souvent la meilleure, surtout pour des apps que tu veux exécuter avec un simple ./start.sh.
+
+Si tu veux, je peux te préparer un exemple complet start.sh qui :
+
+    Active le venv
+
+    Lance ton script MongoDB Python
+
+    Peut être exécuté d’un seul coup sans erreur
+
+Veux‑tu que je fasse ça ?
+
+
